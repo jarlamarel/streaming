@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from './components/Card';
 import Search from './components/Search';
+import {Provider} from 'react-redux';
+import {store} from './redux/store';
+import Login from './components/Login';
 
 export default function App() {
   const [moviesData,setMoviesData]=useState([]);
@@ -18,7 +21,10 @@ export default function App() {
     setMoviesData(res.data.results)});
 }, [search]);
   return (
+    <Provider store={store}>
+     
     <View style={styles.container}>
+      <Login style={styles.header}/>
       <Search/>
       <FlatList
         data={moviesData.slice(0,12)
@@ -30,11 +36,15 @@ export default function App() {
       />
       <StatusBar style="auto" />
     </View>
+    </Provider>
   );
 }
 const styles = StyleSheet.create({
+  header: {
+    height: '50px'
+  },
   container: {
-    flex: 1,
+    flex: '1',
     backgroundColor: '#212040',
     alignItems: 'center',
     justifyContent: 'center',

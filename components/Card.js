@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 
 const Card = ({ movie }) => {
   const dateFormater = (date) => {
@@ -87,6 +87,29 @@ const Card = ({ movie }) => {
 //     storedData += movie.id;
 //     window.localStorage.movies = storedData;
 //   };
+const addStorage = async () => {
+    try {
+      let storedData = await AsyncStorage.getItem('movies');
+      const movieId = movie.id.toString();
+  
+      if (storedData) {
+        const storedMovies = storedData.split(',');
+  
+        if (!storedMovies.includes(movieId)) {
+          storedMovies.push(movieId);
+          await AsyncStorage.setItem('movies', storedMovies.join(','));
+        }
+      } else {
+        await AsyncStorage.setItem('movies', movieId);
+      }
+  
+      console.log(movie.id + ' added to storage successfully');
+    } catch (error) {
+      console.log('Error storing movie:', error);
+    }
+  };
+  
+  
 // const storeData = async () => {
 //     try {
 //       await AsyncStorage.setItem('movies', 'Hello, AsyncStorage!');
